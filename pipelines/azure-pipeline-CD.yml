@@ -32,6 +32,8 @@ stages:
             inputs:
               archiveFilePatterns: '$(System.DefaultWorkingDirectory)/_cinematic-urm-dev-CI/drop/terraform'
               destinationFolder: '$(System.ArtifactsDirectory)'
+              cleanDestinationFolder: false
+              overwriteExistingFiles: true
           #- task: DownloadBuildArtifacts@1
           #  inputs:
           #    buildType: 'specific'              
