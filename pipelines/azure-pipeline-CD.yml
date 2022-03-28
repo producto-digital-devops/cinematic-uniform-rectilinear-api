@@ -33,7 +33,7 @@ stages:
               pipeline: '10'
               buildVersionToDownload: 'latest'
               downloadType: 'specific'
-              downloadPath: '$(System.DefaultWorkingDirectory)'
+              downloadPath: '$(System.ArtifactsDirectory)'          
           - task: TerraformInstaller@0
             displayName: 'Install Terraform latest'
           - task: TerraformTaskV2@2
@@ -41,7 +41,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: init
-              workingDirectory: '$(System.DefaultWorkingDirectory)/_cinematic-urm-dev-CI/drop/terraform'
+              workingDirectory: '$(System.ArtifactsDirectory)/terraform'
               backendServiceArm: $(azConnection)
               backendAzureRmResourceGroupName: $(azStResourceGroup)
               backendAzureRmStorageAccountName: $(azStAccount)
