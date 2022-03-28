@@ -2,13 +2,13 @@ trigger:
 - none
 
 variables:
-  pipelineCI: $(pipelineCI)
-  TerraformDirectory: $(terraformDirectory)
-  azConnection: $(azConnection)
-  azFunctionName: $(azFunctionName)
-  azStResourceGroup: $(azStResourceGroup)
-  azStAccount: $(azStAccount)
-  AzStContainer: $(azStContainer)  
+  pipelineCI: $(pipelineBuild)
+  TerraformDirectory: $(tfDirectory)
+  azConnection: $(connection)
+  azFunctionName: $(functionName)
+  azStResourceGroup: $(stResourceGroup)
+  azStAccount: $(stAccount)
+  AzStContainer: $(stContainer)  
 
 #resources:
 #  pipelines: 
