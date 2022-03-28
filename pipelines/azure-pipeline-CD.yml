@@ -12,8 +12,8 @@ variables:
 
 resources:
   pipelines: 
-  - pipeline:
-    source: $(pipelineCI)
+  - pipeline: $(pipelineCI)
+    source: 'pipeline_$(pipelineCI)'
 stages:
 - stage: Deploy
   jobs:
