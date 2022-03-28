@@ -26,21 +26,22 @@ stages:
       runOnce:
         deploy:
           steps:
-          - download: 'cinematic-urm-dev-CI'
-            artifact: drop
-          - task: ExtractFiles@1
-            inputs:
-              archiveFilePatterns: '$(System.DefaultWorkingDirectory)/_cinematic-urm-dev-CI/drop/terraform'
-              destinationFolder: '$(System.ArtifactsDirectory)'
-              cleanDestinationFolder: false
-              overwriteExistingFiles: true
-          #- task: DownloadBuildArtifacts@1
+          #- download: 'cinematic-urm-dev-CI'
+          #  artifact: drop
+          #- task: ExtractFiles@1
           #  inputs:
-          #    buildType: 'specific'              
-          #    pipeline: 'cinematic-urm-dev-CI'
-          #    buildVersionToDownload: 'latest'
-          #    downloadType: 'specific'
-          #    downloadPath: '$(System.ArtifactsDirectory)'
+          #    archiveFilePatterns: '$(System.DefaultWorkingDirectory)/_cinematic-urm-dev-CI/drop/terraform'
+          #    destinationFolder: '$(System.ArtifactsDirectory)'
+          #    cleanDestinationFolder: false
+          #    overwriteExistingFiles: true
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'specific'
+              project: '78da80bb-c644-48e5-b341-2a1ea25a6062'
+              pipeline: 'cinematic-urm-dev-CI'
+              buildVersionToDownload: 'latest'
+              downloadType: 'specific'
+              downloadPath: '$(System.ArtifactsDirectory)'
           - task: TerraformInstaller@0
             displayName: 'Install Terraform latest'
           - task: TerraformTaskV2@2
