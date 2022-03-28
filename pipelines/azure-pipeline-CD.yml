@@ -2,18 +2,18 @@ trigger:
 - none
 
 variables:
-  pipelineCI: $(pipelineBuild)
-  terraformDirectory: $(tfDirectory)
+  pipelineCI: 'cinematic-urm-dev-CI'
+  terraformDirectory: '$(System.DefaultWorkingDirectory)/_cinematic-urm-dev-CI/drop/terraform'
   azConnection: 'azure-subscription'
-  azFunctionName: $(functionName)
-  azStResourceGroup: $(stResourceGroup)
-  azStAccount: $(stAccount)
-  AzStContainer: $(stContainer)  
+  azFunctionName: 'func-eastus2-dev-cinematic-urm'
+  azStResourceGroup: 'rg-eastus2-monitoring'
+  azStAccount: 'steastus2functions'
+  AzStContainer: 'terraform'  
 
-#resources:
-#  pipelines: 
-#  - pipeline: $(pipelineCI)
-#    source: 'pipeline_$(pipelineCI)'
+resources:
+  pipelines: 
+  - pipeline: 'cinematic-urm-dev-CI'
+    source: 'pipeline_cinematic-urm-dev-CI'
 stages:
 - stage: Deploy
   jobs:
@@ -21,7 +21,7 @@ stages:
     displayName: 'Agent Job'
     pool:
       vmImage: ubuntu-latest
-    environment: '$(pipelineCI)'
+    environment: 'cinematic-urm-dev-CI'
     strategy:
       runOnce:
         deploy:
