@@ -10,10 +10,10 @@ variables:
   azStAccount: $(azStAccount)
   AzStContainer: $(azStContainer)  
 
-resources:
-  pipelines: 
-  - pipeline: $(pipelineCI)
-    source: 'pipeline_$(pipelineCI)'
+#resources:
+#  pipelines: 
+#  - pipeline: $(pipelineCI)
+#    source: 'pipeline_$(pipelineCI)'
 stages:
 - stage: Deploy
   jobs:
