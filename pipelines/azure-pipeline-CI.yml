@@ -38,4 +38,4 @@ steps:
   displayName: "Publish terraform folder"
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)/terraform'
-    artifactName: 'drop'
+    artifactName: 'drop/terraform'
