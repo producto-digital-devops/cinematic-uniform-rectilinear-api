@@ -10,10 +10,10 @@ variables:
   azStAccount: 'steastus2functions'
   AzStContainer: 'terraform'  
 
-#resources:
-#  pipelines: 
-#  - pipeline: '_cinematic-urm-dev-CI'
-#    source: 'pipeline_cinematic-urm-dev-CI'
+resources:
+  pipelines: 
+  - pipeline: '_cinematic-urm-dev-CI'
+    source: 'pipeline_cinematic-urm-dev-CI'
 stages:
 - stage: Deploy
   jobs:
@@ -33,7 +33,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: init
-              workingDirectory: $(terraformDirectory)
+              workingDirectory: '$(System.DefaultWorkingDirectory)/_cinematic-urm-dev-CI/drop/terraform'
               backendServiceArm: $(azConnection)
               backendAzureRmResourceGroupName: $(azStResourceGroup)
               backendAzureRmStorageAccountName: $(azStAccount)
