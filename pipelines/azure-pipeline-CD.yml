@@ -41,7 +41,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: init
-              workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+              workingDirectory: '$(System.ArtifactsDirectory)/drop/terraform'
               backendServiceArm: $(azConnection)
               backendAzureRmResourceGroupName: $(azStResourceGroup)
               backendAzureRmStorageAccountName: $(azStAccount)
