@@ -3,7 +3,7 @@ trigger:
 
 variables:
   pipelineCI: 'cinematic-urm-dev-CI'
-  terraformDirectory: '$(System.DefaultWorkingDirectory)/_cinematic-urm-dev-CI/drop/terraform'
+  terraformDirectory: '$(System.ArtifactsDirectory)/drop/terraform'
   azConnection: 'azure-subscription'
   azFunctionName: 'func-eastus2-dev-cinematic-urm'
   azStResourceGroup: 'rg-eastus2-monitoring'
@@ -28,12 +28,11 @@ stages:
           steps:
           - task: DownloadBuildArtifacts@1
             inputs:
-              buildType: 'specific'
-              project: '78da80bb-c644-48e5-b341-2a1ea25a6062'
-              pipeline: '10'
+              buildType: 'specific'              
+              pipeline: 'cinematic-urm-dev-CI'
               buildVersionToDownload: 'latest'
               downloadType: 'specific'
-              downloadPath: '$(System.ArtifactsDirectory)'          
+              downloadPath: '$(System.ArtifactsDirectory)'
           - task: TerraformInstaller@0
             displayName: 'Install Terraform latest'
           - task: TerraformTaskV2@2
@@ -41,7 +40,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: init
-              workingDirectory: '$(System.ArtifactsDirectory)/drop/terraform'
+              workingDirectory: $(terraformDirectory)
               backendServiceArm: $(azConnection)
               backendAzureRmResourceGroupName: $(azStResourceGroup)
               backendAzureRmStorageAccountName: $(azStAccount)
