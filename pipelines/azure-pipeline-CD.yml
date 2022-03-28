@@ -4,7 +4,7 @@ trigger:
 variables:
   pipelineCI: $(pipelineBuild)
   terraformDirectory: $(tfDirectory)
-  azConnection: $(connection)
+  azConnection: 'azure-subscription'
   azFunctionName: $(functionName)
   azStResourceGroup: $(stResourceGroup)
   azStAccount: $(stAccount)
