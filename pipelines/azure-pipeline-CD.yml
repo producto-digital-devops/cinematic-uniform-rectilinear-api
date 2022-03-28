@@ -28,7 +28,10 @@ stages:
           steps:
           - task: DownloadBuildArtifacts@1
             inputs:
-              buildType: 'current'
+              buildType: 'specific'
+              project: '78da80bb-c644-48e5-b341-2a1ea25a6062'
+              pipeline: '10'
+              buildVersionToDownload: 'latest'
               downloadType: 'specific'
               downloadPath: '$(System.ArtifactsDirectory)'
           - task: TerraformInstaller@0
