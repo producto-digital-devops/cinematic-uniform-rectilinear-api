@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 //## AZURE FUNCTION - MESSAGES
-resource "azurerm_app_service_plan" "asp_msg" {
+resource "azurerm_app_service_plan" "asp_func_urm" {
   name                = "asp-${var.region}-${var.env}-cinematic-urm"
   location            = var.region
   resource_group_name = azurerm_resource_group.rg.name
@@ -39,7 +39,7 @@ resource "azurerm_app_service_plan" "asp_msg" {
   }
   tags = var.tags
 }
-resource "azurerm_storage_account" "st_msg" {
+resource "azurerm_storage_account" "st_func_urm" {
   name                     = "st${var.region}${var.env}cinematicurm"
   location                 = var.region
   resource_group_name      = azurerm_resource_group.rg.name
@@ -47,7 +47,7 @@ resource "azurerm_storage_account" "st_msg" {
   account_replication_type = "LRS"
   tags = var.tags
 }
-resource "azurerm_function_app" "func_msg" {
+resource "azurerm_function_app" "func_urm" {
   name                       = "func-${var.region}-${var.env}-cinematic-urm"
   location                   = var.region
   resource_group_name        = azurerm_resource_group.rg.name
