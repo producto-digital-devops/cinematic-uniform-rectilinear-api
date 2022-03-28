@@ -21,7 +21,7 @@ stages:
     displayName: 'Agent Job'
     pool:
       vmImage: ubuntu-latest
-    environment: $(pipelineCI)
+    environment: '$(pipelineCI)'
     strategy:
       runOnce:
         deploy:
@@ -31,32 +31,32 @@ stages:
           - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
             displayName: 'Terraform : init'
             inputs:
-              workingDirectory: $(terraformDirectory)
-              backendServiceArm: $(azConnection)
-              backendAzureRmResourceGroupName: $(azStResourceGroup)
-              backendAzureRmStorageAccountName: $(azStAccount)
-              backendAzureRmContainerName: $(AzStContainer)
+              workingDirectory: '$(terraformDirectory)'
+              backendServiceArm: '$(azConnection)'
+              backendAzureRmResourceGroupName: '$(azStResourceGroup)'
+              backendAzureRmStorageAccountName: '$(azStAccount)'
+              backendAzureRmContainerName: '$(AzStContainer)'
               backendAzureRmKey: terraform.tfstate
           - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
             displayName: 'Terraform : validate'
             inputs:
               command: validate
-              workingDirectory: $(terraformDirectory)
+              workingDirectory: '$(terraformDirectory)'
           - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
             displayName: 'Terraform : plan'
             inputs:
               command: plan
-              workingDirectory: $(terraformDirectory)
-              environmentServiceNameAzureRM: $(azConnection)
+              workingDirectory: '$(terraformDirectory)'
+              environmentServiceNameAzureRM: '$(azConnection)'
           - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
             displayName: 'Terraform : apply'
             inputs:
               command: apply
-              workingDirectory: $(terraformDirectory)
-              environmentServiceNameAzureRM: $(azConnection)
+              workingDirectory: '$(terraformDirectory)'
+              environmentServiceNameAzureRM: '$(azConnection)'
           - task: AzureFunctionApp@1
             displayName: 'Azure Function App Deploy'
             inputs:
-              azureSubscription: $(azConnection)
+              azureSubscription: '$(azConnection)'
               appType: functionAppLinux
-              appName: $(azFunctionName)
+              appName: '$(azFunctionName)'
