@@ -34,3 +34,8 @@ steps:
   inputs:
     PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
     artifactName: 'drop'
+- task: PublishBuildArtifacts@1
+  displayName: "Publish terraform folder"
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)/terraform'
+    artifactName: 'drop'
