@@ -3,7 +3,7 @@ trigger:
 
 variables:
   pipelineCI: $(pipelineCI)
-  TerraformDirectory: $(TerraformDirectory)
+  TerraformDirectory: $(terraformDirectory)
   azConnection: $(azConnection)
   azFunctionName: $(azFunctionName)
   azStResourceGroup: $(azStResourceGroup)
@@ -32,7 +32,7 @@ jobs:
         - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
           displayName: 'Terraform : init'
           inputs:
-            workingDirectory: $(TerraformDirectory)
+            workingDirectory: $(terraformDirectory)
             backendServiceArm: $(azConnection)
             backendAzureRmResourceGroupName: $(azStResourceGroup)
             backendAzureRmStorageAccountName: $(azStAccount)
@@ -43,20 +43,20 @@ jobs:
           displayName: 'Terraform : validate'
           inputs:
             command: validate
-            workingDirectory: $(TerraformDirectory)
+            workingDirectory: $(terraformDirectory)
 
         - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
           displayName: 'Terraform : plan'
           inputs:
             command: plan
-            workingDirectory: $(TerraformDirectory)
+            workingDirectory: $(terraformDirectory)
             environmentServiceNameAzureRM: $(azConnection)
 
         - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
           displayName: 'Terraform : apply'
           inputs:
             command: apply
-            workingDirectory: $(TerraformDirectory)
+            workingDirectory: $(terraformDirectory)
             environmentServiceNameAzureRM: $(azConnection)
 
 - job: Deploy
