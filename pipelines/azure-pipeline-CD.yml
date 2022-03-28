@@ -1,0 +1,75 @@
+trigger:
+- none
+
+variables:
+  pipelineCI: $(pipelineCI)
+  TerraformDirectory: $(TerraformDirectory)
+  azConnection: $(azConnection)
+  azFunctionName: $(azFunctionName)
+  azStResourceGroup: $(azStResourceGroup)
+  azStAccount: $(azStAccount)
+  AzStContainer: $(azStContainer)  
+
+resources:
+  pipelines: 
+  - pipeline:
+    source: $(pipelineCI)
+    trigger:
+    - develop
+
+jobs:
+- job: Deploy
+  displayName: Agent Job IaaC
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+          displayName: 'Install Terraform latest'
+
+        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+          displayName: 'Terraform : init'
+          inputs:
+            workingDirectory: $(TerraformDirectory)
+            backendServiceArm: $(azConnection)
+            backendAzureRmResourceGroupName: $(azStResourceGroup)
+            backendAzureRmStorageAccountName: $(azStAccount)
+            backendAzureRmContainerName: $(AzStContainer)
+            backendAzureRmKey: terraform.tfstate
+
+        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+          displayName: 'Terraform : validate'
+          inputs:
+            command: validate
+            workingDirectory: $(TerraformDirectory)
+
+        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+          displayName: 'Terraform : plan'
+          inputs:
+            command: plan
+            workingDirectory: $(TerraformDirectory)
+            environmentServiceNameAzureRM: $(azConnection)
+
+        - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+          displayName: 'Terraform : apply'
+          inputs:
+            command: apply
+            workingDirectory: $(TerraformDirectory)
+            environmentServiceNameAzureRM: $(azConnection)
+
+- job: Deploy
+  displayName: Agent Job Deploy
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: AzureFunctionApp@1
+          displayName: 'Azure Function App Deploy'
+          inputs:
+            azureSubscription: $(azConnection)
+            appType: functionAppLinux
+            appName: $(azFunctionName)
