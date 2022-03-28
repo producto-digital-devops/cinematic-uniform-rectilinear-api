@@ -33,7 +33,7 @@ stages:
               pipeline: '10'
               buildVersionToDownload: 'latest'
               downloadType: 'specific'
-              downloadPath: '$(System.ArtifactsDirectory)'
+              downloadPath: '$(System.DefaultWorkingDirectory)'
           - task: TerraformInstaller@0
             displayName: 'Install Terraform latest'
           - task: TerraformTaskV2@2
