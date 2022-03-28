@@ -29,7 +29,7 @@ steps:
   displayName: 'Copy Files to: /terraform'
   inputs:
     SourceFolder: 'terraform'
-    TargetFolder: '$(System.DefaultWorkingDirectory)/terraform'
+    TargetFolder: '$(build.artifactstagingdirectory)/terraform'
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
