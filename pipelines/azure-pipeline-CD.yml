@@ -12,7 +12,7 @@ variables:
 
 resources:
   pipelines: 
-  - pipeline: 'cinematic-urm-dev-CI'
+  - pipeline: '_cinematic-urm-dev-CI'
     source: 'pipeline_cinematic-urm-dev-CI'
 stages:
 - stage: Deploy
