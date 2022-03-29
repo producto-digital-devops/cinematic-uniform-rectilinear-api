@@ -1,0 +1,72 @@
+trigger:
+- none
+
+variables:
+  projectCI: '78da80bb-c644-48e5-b341-2a1ea25a6062'
+  pipelineCI: 'cinematic-urm-dev-CI'
+  terraformDirectory: '$(System.ArtifactsDirectory)/drop/terraform'
+  azConnection: 'azure-subscription'
+  azStResourceGroup: 'rg-eastus2-monitoring'
+  azStAccount: 'steastus2functions'
+  azStContainer: 'terraform'  
+
+stages:
+- stage: Deploy
+  jobs:
+  - deployment: Deployment
+    displayName: 'Agent Job IaaC'
+    pool:
+      vmImage: ubuntu-latest
+    environment: '$(pipelineCI)'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@1
+            inputs:
+              buildType: 'specific'
+              project: '$(projectCI)'
+              pipeline: '$(pipelineCI)'
+              buildVersionToDownload: 'latest'
+              downloadType: 'specific'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: TerraformInstaller@0
+            displayName: 'Install Terraform latest'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform init'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(terraformDirectory)'
+              commandOptions: '-var ''backend.group=$(azStResourceGroup)'' -var ''backend.storage=$(azStAccount)'' -var ''backend.container=$(azStContainer)'' -var ''backend.key=terraform.tfstate'''
+              backendServiceArm: '$(azConnection)'
+              backendAzureRmResourceGroupName: '$(azStResourceGroup)'
+              backendAzureRmStorageAccountName: '$(azStAccount)'
+              backendAzureRmContainerName: '$(azStContainer)'
+              backendAzureRmKey: 'terraform.tfstate'
+          - task: TerraformTaskV2@2
+            inputs:
+              provider: 'azurerm'
+              command: 'destroy'
+              workingDirectory: '$(terraformDirectory)'
+              environmentServiceNameAzureRM: '$(azConnection)'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform validate'
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+              workingDirectory: '$(terraformDirectory)'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform plan'
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(terraformDirectory)'
+              environmentServiceNameAzureRM: '$(azConnection)'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform apply'
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(terraformDirectory)'
+              environmentServiceNameAzureRM: '$(azConnection)'
