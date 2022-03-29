@@ -2,6 +2,7 @@ trigger:
 - none
 
 variables:
+  env: '$(environment)'
   project: '$(organizationId)'
   pipeline: '$(pipelineBuild)'
   terraformDirectory: '$(System.ArtifactsDirectory)/drop/terraform'
@@ -17,7 +18,7 @@ stages:
     displayName: 'Agent Job IaaC'
     pool:
       vmImage: ubuntu-latest
-    environment: '$(pipelineCI)'
+    environment: '$(env)'
     strategy:
       runOnce:
         deploy:
