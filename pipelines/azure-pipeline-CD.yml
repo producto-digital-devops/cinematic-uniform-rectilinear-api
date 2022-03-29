@@ -2,11 +2,11 @@ trigger:
 - none
 
 variables:
-  env: '$(environment)'
-  project: '$(organizationId)'
-  pipeline: '$(pipelineBuild)'
-  azConnection: '$(connection)'
-  azFunctionName: '$(functionName)' 
+  env: $(environment)
+  project: $(organizationId)
+  pipeline: $(pipelineBuild)
+  azConnection: $(connection)
+  azFunctionName: $(functionName)
 
 stages:
 - stage: Deploy
