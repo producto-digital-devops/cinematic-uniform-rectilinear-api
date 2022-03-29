@@ -2,10 +2,11 @@ trigger:
 - none
 
 variables:
-  projectCI: '78da80bb-c644-48e5-b341-2a1ea25a6062'
-  pipelineCI: 'cinematic-urm-dev-CI'
-  azConnection: 'azure-subscription'
-  azFunctionName: 'func-eastus2-dev-cinematic-urm' 
+  env: '$(environment)'
+  project: '$(organizationId)'
+  pipeline: '$(pipelineBuild)'
+  azConnection: '$(connection)'
+  azFunctionName: '$(functionName)' 
 
 stages:
 - stage: Deploy
@@ -14,7 +15,7 @@ stages:
     displayName: 'Agent Job Deploy'
     pool:
       vmImage: ubuntu-latest
-    environment: '$(pipelineCI)'
+    environment: '$(env)'
     strategy:
       runOnce:
         deploy:
@@ -22,8 +23,8 @@ stages:
           - task: DownloadBuildArtifacts@1
             inputs:
               buildType: 'specific'
-              project: '$(projectCI)'
-              pipeline: '$(pipelineCI)'
+              project: '$(project)'
+              pipeline: '$(pipeline)'
               buildVersionToDownload: 'latest'
               downloadType: 'specific'
               downloadPath: '$(System.ArtifactsDirectory)'
