@@ -7,3 +7,9 @@ tags = {
   platform: "Terraform"
   environment : "Develop"
 }
+backend = {
+  group: "",
+  storage: "",
+  container: ""
+  key: ""
+}

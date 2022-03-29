@@ -15,3 +15,11 @@ variable "tags" {
     platform    = string
   })
 }
+variable "backend" {
+  type = object({
+    group       = string
+    storage     = string
+    container   = string
+    key         = string
+  })
+}

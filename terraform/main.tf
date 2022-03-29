@@ -1,4 +1,10 @@
 terraform {
+  backend "azurerm"{
+    resource_group_name = var.backend.group
+    storage_account_name = var.backend.storage
+    container_name = var.backend.container
+    key = var.backend.key
+  }
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
