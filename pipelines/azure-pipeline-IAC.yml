@@ -2,13 +2,13 @@ trigger:
 - none
 
 variables:
-  projectCI: '78da80bb-c644-48e5-b341-2a1ea25a6062'
-  pipelineCI: 'cinematic-urm-dev-CI'
+  project: '$(organizationId)'
+  pipeline: '$(pipelineBuild)'
   terraformDirectory: '$(System.ArtifactsDirectory)/drop/terraform'
-  azConnection: 'azure-subscription'
-  azStResourceGroup: 'rg-eastus2-monitoring'
-  azStAccount: 'steastus2functions'
-  azStContainer: 'terraform'  
+  azConnection: '$(connection)'
+  azStResourceGroup: '$(stResGroup)'
+  azStAccount: '$(stAccount)'
+  azStContainer: '$(stContainer)'  
 
 stages:
 - stage: Deploy
@@ -25,8 +25,8 @@ stages:
           - task: DownloadBuildArtifacts@1
             inputs:
               buildType: 'specific'
-              project: '$(projectCI)'
-              pipeline: '$(pipelineCI)'
+              project: '$(project)'
+              pipeline: '$(pipeline)'
               buildVersionToDownload: 'latest'
               downloadType: 'specific'
               downloadPath: '$(System.ArtifactsDirectory)'
