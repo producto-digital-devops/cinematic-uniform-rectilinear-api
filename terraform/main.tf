@@ -51,9 +51,9 @@ resource "azurerm_function_app" "func_urm" {
   name                       = "func-${var.region}-${var.env}-cinematic-urm"
   location                   = var.region
   resource_group_name        = azurerm_resource_group.rg.name
-  app_service_plan_id        = azurerm_app_service_plan.asp_msg.id
-  storage_account_name       = azurerm_storage_account.st_msg.name
-  storage_account_access_key = azurerm_storage_account.st_msg.primary_access_key
+  app_service_plan_id        = azurerm_app_service_plan.asp_func_urm.id
+  storage_account_name       = azurerm_storage_account.st_func_urm.name
+  storage_account_access_key = azurerm_storage_account.st_func_urm.primary_access_key
   https_only                 = true
   os_type                    = "linux"
   version                    = "~3"
