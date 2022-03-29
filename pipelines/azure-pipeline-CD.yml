@@ -2,7 +2,7 @@ trigger:
 - none
 
 variables:
-  projectCI: $[variables.OrganizationId]
+  projectCI: '78da80bb-c644-48e5-b341-2a1ea25a6062'
   pipelineCI: 'cinematic-urm-dev-CI'
   terraformDirectory: '$(System.ArtifactsDirectory)/drop/terraform'
   azConnection: 'azure-subscription'
