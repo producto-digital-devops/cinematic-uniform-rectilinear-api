@@ -42,7 +42,7 @@ stages:
               pipeline: $(pipelineCI)
               buildVersionToDownload: 'latest'
               downloadType: 'specific'
-              downloadPath: '$(System.ArtifactsDirectory)'
+              downloadPath: $(System.ArtifactsDirectory)
           - task: TerraformInstaller@0
             displayName: 'Install Terraform latest'
           - task: TerraformTaskV2@2
@@ -50,12 +50,12 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              workingDirectory: '$(terraformDirectory)'
-              commandOptions: '-var ''backend.group=$(azStResourceGroup)'' -var ''backend.storage=($azStAccount)'' -var ''backend.container=$(azStContanier)'' -var ''backend.key=terraform.tfstate'''
-              backendServiceArm: '$(azConnection)'
-              backendAzureRmResourceGroupName: '$(azStResourceGroup)'
-              backendAzureRmStorageAccountName: '$(azStAccount)'
-              backendAzureRmContainerName: '$(azStContainer)'
+              workingDirectory: $(terraformDirectory)
+              commandOptions: '-var ''backend.group=$(azStResourceGroup)'' -var ''backend.storage=$(azStAccount)'' -var ''backend.container=$(azStContainer)'' -var ''backend.key=terraform.tfstate'''
+              backendServiceArm: $(azConnection)
+              backendAzureRmResourceGroupName: $(azStResourceGroup)
+              backendAzureRmStorageAccountName: $(azStAccount)
+              backendAzureRmContainerName: $(azStContainer)
               backendAzureRmKey: 'terraform.tfstate'
           - task: TerraformTaskV2@2
             displayName: 'Terraform validate'
@@ -80,7 +80,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Azure Function App Deploy'
             inputs:
-              azureSubscription: '$(azConnection)'
+              azureSubscription: $(azConnection)
               appType: 'functionAppLinux'
-              appName: '$(azFunctionName)'
-              package: $(System.ArtifactsDirectory)/drop/*.zip
+              appName: $(azFunctionName)
+              package: '$(System.ArtifactsDirectory)/drop/*.zip'
