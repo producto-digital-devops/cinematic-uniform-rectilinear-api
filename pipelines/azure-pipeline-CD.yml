@@ -49,13 +49,14 @@ stages:
             displayName: 'Terraform init'
             inputs:
               provider: 'azurerm'
-              command: init
-              workingDirectory: $(terraformDirectory)
-              backendServiceArm: $(azConnection)
-              backendAzureRmResourceGroupName: $(azStResourceGroup)
-              backendAzureRmStorageAccountName: $(azStAccount)
-              backendAzureRmContainerName: $(azStContainer)
-              backendAzureRmKey: terraform.tfstate
+              command: 'init'
+              workingDirectory: '$(terraformDirectory)'
+              commandOptions: '-var ''backend.group=$(azStResourceGroup)'' -var ''backend.storage=($azStAccount)'' -var ''backend.container=$(azStContanier)'' -var ''backend.key=terraform.tfstate'''
+              backendServiceArm: '$(azConnection)'
+              backendAzureRmResourceGroupName: '$(azStResourceGroup)'
+              backendAzureRmStorageAccountName: '$(azStAccount)'
+              backendAzureRmContainerName: '$(azStContainer)'
+              backendAzureRmKey: 'terraform.tfstate'
           - task: TerraformTaskV2@2
             displayName: 'Terraform validate'
             inputs:
