@@ -16,6 +16,8 @@ stages:
     pool:
       vmImage: ubuntu-latest
     environment: '$(env)'
+    variables:
+      conn: '$(azConnection)'
     strategy:
       runOnce:
         deploy:
@@ -31,7 +33,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Azure Function App Deploy'
             inputs:
-              azureSubscription: '$(azConnection)'
+              azureSubscription: '$(conn)'
               appType: 'functionAppLinux'
               appName: '$(azFunctionName)'
               package: '$(System.ArtifactsDirectory)/drop/*.zip'
