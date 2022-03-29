@@ -2,13 +2,14 @@ trigger:
 - none
 
 variables:
+  projectCI: $[variables.OrganizationId]
   pipelineCI: 'cinematic-urm-dev-CI'
   terraformDirectory: '$(System.ArtifactsDirectory)/drop/terraform'
   azConnection: 'azure-subscription'
   azFunctionName: 'func-eastus2-dev-cinematic-urm'
   azStResourceGroup: 'rg-eastus2-monitoring'
   azStAccount: 'steastus2functions'
-  AzStContainer: 'terraform'  
+  azStContainer: 'terraform'  
 
 #resources:
 #  pipelines: 
@@ -37,8 +38,8 @@ stages:
           - task: DownloadBuildArtifacts@1
             inputs:
               buildType: 'specific'
-              project: '78da80bb-c644-48e5-b341-2a1ea25a6062'
-              pipeline: 'cinematic-urm-dev-CI'
+              project: $(projectCI)
+              pipeline: $(pipelineCI)
               buildVersionToDownload: 'latest'
               downloadType: 'specific'
               downloadPath: '$(System.ArtifactsDirectory)'
@@ -53,7 +54,7 @@ stages:
               backendServiceArm: $(azConnection)
               backendAzureRmResourceGroupName: $(azStResourceGroup)
               backendAzureRmStorageAccountName: $(azStAccount)
-              backendAzureRmContainerName: $(AzStContainer)
+              backendAzureRmContainerName: $(azStContainer)
               backendAzureRmKey: terraform.tfstate
           - task: TerraformTaskV2@2
             displayName: 'Terraform validate'
