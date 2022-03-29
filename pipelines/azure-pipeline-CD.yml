@@ -26,15 +26,7 @@ stages:
     strategy:
       runOnce:
         deploy:
-          steps:
-          #- download: 'cinematic-urm-dev-CI'
-          #  artifact: drop
-          #- task: ExtractFiles@1
-          #  inputs:
-          #    archiveFilePatterns: '$(System.DefaultWorkingDirectory)/_cinematic-urm-dev-CI/drop/terraform'
-          #    destinationFolder: '$(System.ArtifactsDirectory)'
-          #    cleanDestinationFolder: false
-          #    overwriteExistingFiles: true
+          steps:          
           - task: DownloadBuildArtifacts@1
             inputs:
               buildType: 'specific'
@@ -44,7 +36,7 @@ stages:
               downloadType: 'specific'
               downloadPath: $(System.ArtifactsDirectory)
           - task: TerraformInstaller@0
-            displayName: 'Install Terraform latest'
+            displayName: 'Install Terraform latest'          
           - task: TerraformTaskV2@2
             displayName: 'Terraform init'
             inputs:
@@ -57,6 +49,12 @@ stages:
               backendAzureRmStorageAccountName: $(azStAccount)
               backendAzureRmContainerName: $(azStContainer)
               backendAzureRmKey: 'terraform.tfstate'
+          - task: TerraformTaskV2@2
+            inputs:
+              provider: 'azurerm'
+              command: 'destroy'
+              workingDirectory: $(terraformDirectory)
+              environmentServiceNameAzureRM: $(azConnection)
           - task: TerraformTaskV2@2
             displayName: 'Terraform validate'
             inputs:
