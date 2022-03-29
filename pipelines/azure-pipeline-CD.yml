@@ -1,16 +1,13 @@
 trigger:
 - none
 
-parameters:
-- name: subscription
-  default: '$(connection)'
-
 variables:
   env: $(environment)
   project: $(organizationId)
   pipeline: $(pipelineBuild)
-  azConnection: $(connection)
-  azFunctionName: $(functionName)
+  connection: 'cloud-subscription'
+  functionName: $(azFunctionName)
+  vmImage: 'ubuntu-latest'
 
 stages:
 - stage: Deploy
@@ -18,7 +15,7 @@ stages:
   - deployment: Deployment
     displayName: 'Agent Job Deploy'
     pool:
-      vmImage: ubuntu-latest
+      vmImage: '$(vmImage)'
     environment: '$(env)'    
     strategy:
       runOnce:
@@ -35,7 +32,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Azure Function App Deploy'
             inputs:
-              azureSubscription: '{{ parameters.subscription }}'
+              azureSubscription: '$(connection)'
               appType: 'functionAppLinux'
-              appName: '$(azFunctionName)'
+              appName: '$(functionName)'
               package: '$(System.ArtifactsDirectory)/drop/*.zip'
