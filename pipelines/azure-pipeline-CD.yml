@@ -79,6 +79,7 @@ stages:
           - task: AzureFunctionApp@1
             displayName: 'Azure Function App Deploy'
             inputs:
-              azureSubscription: $(azConnection)
-              appType: functionAppLinux
-              appName: $(azFunctionName)
+              azureSubscription: '$(azConnection)'
+              appType: 'functionAppLinux'
+              appName: '$(azFunctionName)'
+              package: $(System.ArtifactsDirectory)/drop/*.zip
