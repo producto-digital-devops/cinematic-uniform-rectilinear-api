@@ -69,4 +69,5 @@ stages:
               provider: 'azurerm'
               command: 'apply'
               workingDirectory: '$(terraformDirectory)'
+              commandOptions: '-var ''backend.group=$(azStResourceGroup)'' -var ''backend.storage=$(azStAccount)'' -var ''backend.container=$(azStContainer)'' -var ''backend.key=terraform.tfstate'''
               environmentServiceNameAzureRM: '$(azConnection)'
