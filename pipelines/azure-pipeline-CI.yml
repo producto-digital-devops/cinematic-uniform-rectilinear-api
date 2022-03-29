@@ -2,21 +2,22 @@ trigger:
 - none
 
 variables:
-  azConnection: $(azConnection)
-  azFunctionName: $(azFunctionName)
-  
+  iacFolder: 'terraform'
+  vmImage: 'ubuntu-latest'
+  pythonVersion: '3.7'
+
 stages:
 - stage: Build
   jobs:
   - job: Build
-    DisplayName: 'Agent Job Build'
+    displayName: 'Agent Job Build'
     pool:
-      vmImage: ubuntu-latest
+      vmImage: '$(vmImage)'
     steps:
     - task: UsePythonVersion@0
       displayName: 'Setting python version to 3.7 as required by functions'
       inputs:
-        versionSpec: '3.7'
+        versionSpec: '$(pythonVersion)'
         architecture: 'x64'
     - bash: |
         if [ -f extensions.csproj ]
@@ -35,14 +36,14 @@ stages:
         PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
         artifactName: 'drop'
     - task: CopyFiles@2
-      displayName: 'Copy Files to: /terraform'
+      displayName: 'Copy Files to /$(iacFolder)'
       inputs:
-        SourceFolder: 'terraform'
+        SourceFolder: '$(iacFolder)'
         Contents: '**'
-        TargetFolder: '$(build.artifactstagingdirectory)/terraform'
+        TargetFolder: '$(build.artifactstagingdirectory)/$(iacFolder)'
         CleanTargetFolder: true
     - task: PublishBuildArtifacts@1
       displayName: "Publish terraform folder"
       inputs:
-        PathtoPublish: '$(build.artifactstagingdirectory)/terraform'
-        artifactName: 'drop/terraform'
+        PathtoPublish: '$(build.artifactstagingdirectory)/$(iacFolder)'
+        artifactName: 'drop/$(iacFolder)'
