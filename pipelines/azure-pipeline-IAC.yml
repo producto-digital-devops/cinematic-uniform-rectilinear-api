@@ -1,0 +1,82 @@
+trigger:
+- none
+
+variables:
+  env: '$(environment)'
+  project: '$(organizationId)'
+  pipeline: '$(pipelineBuild)'  
+  connection: 'cloud-subscription'
+  resourceGroup: '$(azResourceGroup)'
+  stAccount: '$(azStorageAccount)'
+  stContainer: '$(azStorageContainer)'  
+  iacFolder: 'terraform'
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Deploy
+  jobs:
+  - deployment: Deployment
+    displayName: 'Agent Job IaaC'
+    pool:
+      vmImage: '$(vmImage)'
+    environment: '$(env)'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@1
+            displayName: 'Download files from $(System.ArtifactsDirectory)'
+            inputs:
+              buildType: 'specific'
+              project: '$(project)'
+              pipeline: '$(pipeline)'
+              buildVersionToDownload: 'latest'
+              downloadType: 'specific'
+              downloadPath: '$(System.ArtifactsDirectory)'
+          - task: TerraformInstaller@0
+            displayName: 'Install Terraform latest'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform init'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.ArtifactsDirectory)/drop/$(iacFolder)'
+              #commandOptions: '-var ''backend.group=$(resourceGroup)'' -var ''backend.storage=$(stAccount)'' -var ''backend.container=$(stContainer)'' -var ''backend.key=terraform.tfstate'''
+              backendServiceArm: '$(connection)'
+              backendAzureRmResourceGroupName: '$(resourceGroup)'
+              backendAzureRmStorageAccountName: '$(stAccount)'
+              backendAzureRmContainerName: '$(stContainer)'
+              backendAzureRmKey: 'terraform.tfstate'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform destroy'
+            inputs:
+              provider: 'azurerm'
+              command: 'destroy'
+              workingDirectory: '$(System.ArtifactsDirectory)/drop/$(iacFolder)'
+              environmentServiceNameAzureRM: '$(connection)'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform validate'
+            inputs:
+              provider: 'azurerm'
+              command: 'validate'
+              workingDirectory: '$(System.ArtifactsDirectory)/drop/$(iacFolder)'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform plan'
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(System.ArtifactsDirectory)/drop/$(iacFolder)'
+              environmentServiceNameAzureRM: '$(connection)'
+          - task: TerraformTaskV2@2
+            displayName: 'Terraform apply'
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(System.ArtifactsDirectory)/drop/$(iacFolder)'
+              #commandOptions: '-var ''backend.group=$(resourceGroup)'' -var ''backend.storage=$(stAccount)'' -var ''backend.container=$(stContainer)'' -var ''backend.key=terraform.tfstate'''
+              backendServiceArm: '$(connection)'
+              backendAzureRmResourceGroupName: '$(resourceGroup)'
+              backendAzureRmStorageAccountName: '$(stAccount)'
+              backendAzureRmContainerName: '$(stContainer)'
+              backendAzureRmKey: 'terraform.tfstate'
+              environmentServiceNameAzureRM: '$(connection)'
