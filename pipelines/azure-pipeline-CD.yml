@@ -22,6 +22,7 @@ stages:
         deploy:
           steps:          
           - task: DownloadBuildArtifacts@1
+            displayName: 'Download .zip build artifact'
             inputs:
               buildType: 'specific'
               project: '$(project)'
