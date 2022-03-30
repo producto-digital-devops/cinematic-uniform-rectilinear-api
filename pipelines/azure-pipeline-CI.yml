@@ -32,6 +32,7 @@ stages:
         includeRootFolder: false
         archiveFile: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
     - task: PublishBuildArtifacts@1
+      displayName: 'Publish .zip file'
       inputs:
         PathtoPublish: '$(System.DefaultWorkingDirectory)/build$(Build.BuildId).zip'
         artifactName: 'drop'
@@ -43,7 +44,7 @@ stages:
         TargetFolder: '$(build.artifactstagingdirectory)/$(iacFolder)'
         CleanTargetFolder: true
     - task: PublishBuildArtifacts@1
-      displayName: "Publish terraform folder"
+      displayName: 'Publish terraform folder'
       inputs:
         PathtoPublish: '$(build.artifactstagingdirectory)/$(iacFolder)'
         artifactName: 'drop/$(iacFolder)'
