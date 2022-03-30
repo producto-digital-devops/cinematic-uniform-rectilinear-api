@@ -25,6 +25,7 @@ stages:
         deploy:
           steps:
           - task: DownloadBuildArtifacts@1
+            displayName: 'Download files from $(System.ArtifactsDirectory)'
             inputs:
               buildType: 'specific'
               project: '$(project)'
@@ -47,6 +48,7 @@ stages:
               backendAzureRmContainerName: '$(stContainer)'
               backendAzureRmKey: 'terraform.tfstate'
           - task: TerraformTaskV2@2
+            displayName: 'Terraform destroy'
             inputs:
               provider: 'azurerm'
               command: 'destroy'
